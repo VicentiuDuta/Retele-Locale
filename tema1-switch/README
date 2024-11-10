@@ -1,0 +1,26 @@
+1 2 3
+                                                        TEMA 1 RL - SWITCH
+                                                -Duta Vicentiu-Alecsandru - 331CC-
+       
+1. Tabela de comutare (Mac Table):
+    - Cand primesc un frame, adaug in tabela de comutare adresa MAC a sursei si interfata pe care am primit frame-ul.
+    - Verific daca adresa destinatie este unicast. In cazul in care este, verific daca aceasta se afla in tabela de comutare. Daca nu se afla, trimit frame-ul pe toate interfetele, in afara de cea pe care am primit frame-ul.
+Daca se afla, trimit frame-ul doar pe interfata corespunzatoare adresei destinatie.
+    - Daca adresa destinatie este multicast/broadcast, trimit frame-ul pe toate interfetele, in afara de cea pe care am primit frame-ul.
+
+2. VLAN:
+    - Am implementat VLAN-ul folosind o tabela 'vlan_table' care contine pentru fiecare interfata vlan-ul din care face parte.
+    - Am inceput prin citirea fisierului de configurare a switch-ului si am completat tabela 'vlan_table' cu interfetele si vlan-urile corespunzatoare.
+    - Daca primesc un frame pe o interfata access, campului vlan_id ii asociez vlan-ul interfetei, deoarece pachetele care vin pe interfetele access nu au campul vlan_id setat.
+    - In functia send frame, verific cele 4 cazuri posibile:
+        - trunk -> trunk => trimit pachetul mai departe fara modificari
+        - access -> access => trimit pachetul mai departe daca vlan-urile sunt aceleasi
+        - trunk -> access => trimit pachetul mai departe daca vlan-ul din pachet este acelasi cu vlan-ul interfetei, dupa ce ii scot header-ul 802.1Q
+        - access -> trunk => trimit pachetul mai departe dupa ce ii adaug header-ul 802.1Q
+
+3. STP:
+    - Atunci cand switch-ul porneste, initializez porturile si cele 3 campuri BPDU.
+    - In cazul in care primesc un pachet BPDU, verific daca acesta are un root_bridge_id mai mic decat cel pe care il am eu. Daca da, actualizez costul, deschid root_port-ul si inchid restul porturilor trunk si trimit BPDU-ul actualizat pe toate porturile.
+    - Daca BPDU-ul primit are un root_bridge_id egal cu al meu, verific daca a venit pe root_port-ul meu si costul este mai mic decat cel pe care il am eu. Daca da, actualizez costul. Daca nu a venit pe root_port, verific daca costul meu este mai mic decat cel primit, in caz afirmativ ma asigur ca port-ul este deschis, 
+deoarece drumul catre root este prin acest switch.
+    - In final, daca bridge_id-ul switchului este egal cu root_bridge_id-ul, acesta este root-ul si deschid toate porturile. 
