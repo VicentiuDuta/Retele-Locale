@@ -1,6 +1,6 @@
 1 2 3
-                                                        TEMA 1 RL - SWITCH
-                                                -Duta Vicentiu-Alecsandru - 331CC-
+                                                                        TEMA 1 RL - SWITCH
+                                                                -Duta Vicentiu-Alecsandru - 331CC-
        
 1. Tabela de comutare (Mac Table):
     - Cand primesc un frame, adaug in tabela de comutare adresa MAC a sursei si interfata pe care am primit frame-ul.
